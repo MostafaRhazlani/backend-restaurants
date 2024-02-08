@@ -22,7 +22,7 @@ class RestaurantFactory extends Factory
             'location' => fake()->address(),
             'phone' => fake()->phoneNumber(),
             'email' => fake()->email(),
-            'description' => fake()->paragraph(),
+            'description' => fake()->paragraph(2),
             'user_id' => User::all()->random()->id
         ];
     }
