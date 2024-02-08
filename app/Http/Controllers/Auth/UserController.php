@@ -51,11 +51,10 @@ class UserController extends Controller
             'role_id' => 3
         ]);
 
-        $response = [
-            'user' => $user
-        ];
-
-         response($response, 201);
+        return response()->json([
+            'user' => $user,
+            'message' => 'success'
+        ]);
     }
 
     public function logout() {
