@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -18,7 +19,8 @@ use App\Http\Controllers\Auth\RegisterController;
 */
 
 // Public routes
-Route::get('/restaurant/get', [RestaurantController::class, 'index']);
+Route::get('/restaurants', [RestaurantController::class, 'index']);
+Route::get('/menus/{id}', [MenuController::class, 'index']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 
