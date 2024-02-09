@@ -20,7 +20,7 @@ class MenuFactory extends Factory
         return [
             'name_menu' => fake()->name(),
             'price' => fake()->numberBetween(5, 300),
-            'description' => fake()->paragraph(),
+            'description' => fake()->paragraph(2),
             'category_id' => Category::all()->random()->id,
         ];
     }
