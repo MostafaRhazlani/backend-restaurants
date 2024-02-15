@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Restaurant;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -13,6 +14,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(8)->create();
+        $users = User::factory(3)->create();
+
+        $users->each(function ($user) {
+            $restaurant = Restaurant::factory()->create([
+                'user_id' => $user->id
+            ]);
+        });
     }
 }
