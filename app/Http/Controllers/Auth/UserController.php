@@ -48,7 +48,6 @@ class UserController extends Controller
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password']),
-            'role_id' => 3
         ]);
 
         return response()->json([
