@@ -26,7 +26,7 @@ class UserController extends Controller
 
         if(!$user || !Hash::check($fields['password'], $user->password)) {
             return response([
-                'message' => 'Something was wrong'
+                'message' => 'The email or password is incorrect'
             ], 401);
         }
 
@@ -41,17 +41,11 @@ class UserController extends Controller
     // register
     public function register(Request $request) {
 
-        // validation user
-        $fields = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|confirmed',
-        ]);
-
         $defaultRole = null;
 
         // check if role_type equal Owner
         if ($request->type_role === 'Owner') {
+
             $defaultRole = Role::where('name_role', 'Owner')->first();
 
             if(!$defaultRole) {
@@ -60,34 +54,38 @@ class UserController extends Controller
                 ], 404);
             }
 
-            // create owner
-            $user = User::create([
-                'name' => $fields['name'],
-                'email' => $fields['email'],
-                'password' => bcrypt($fields['password']),
-                'role_id' => $defaultRole ? $defaultRole->id : null
-            ]);
-
-            // validation restauant
-            $validation = $request->validate([
+            // validation owner
+            $fieldsOwner = $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|confirmed',
                 'name_restaurant' => 'required|string',
                 'location' => 'required',
-                'email' => 'required|email|unique:restaurants,email',
+                'email_restaurant' => 'required|email|unique:restaurants,email',
                 'phone' => 'required',
+            ]);
+
+            // create owner
+            $owner = User::create([
+                'name' => $fieldsOwner['name'],
+                'email' => $fieldsOwner['email'],
+                'password' => bcrypt($fieldsOwner['password']),
+                'role_id' => $defaultRole ? $defaultRole->id : null
             ]);
 
             // crate restaurant
             $restaurant = Restaurant::create([
-                'name_restaurant' => $validation['name_restaurant'],
-                'location' => $validation['location'],
-                'email' => $validation['email'],
-                'phone' => $validation['phone'],
-                'user_id' => $user->id
+                'name_restaurant' => $fieldsOwner['name_restaurant'],
+                'location' => $fieldsOwner['location'],
+                'email' => $fieldsOwner['email_restaurant'],
+                'phone' => $fieldsOwner['phone'],
+                'user_id' => $owner->id,
+                'description' => $request->description
             ]);
 
             //  return user with restaurant data
             return response()->json([
-                'user' => $user,
+                'user' => $owner,
                 'restaurant' => $restaurant,
                 'message' => true
             ]);
@@ -102,10 +100,17 @@ class UserController extends Controller
                 ], 404);
             }
 
+            // validation user
+            $fieldsUser = $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|confirmed',
+            ]);
+
             $user = User::create([
-                'name' => $fields['name'],
-                'email' => $fields['email'],
-                'password' => bcrypt($fields['password']),
+                'name' => $fieldsUser['name'],
+                'email' => $fieldsUser['email'],
+                'password' => bcrypt($fieldsUser['password']),
                 'role_id' => $defaultRole ? $defaultRole->id : null
             ]);
 
