@@ -26,7 +26,9 @@ Route::post('/login', [UserController::class, 'login']);
 
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::resource('restaurant', RestaurantController::class);
+    Route::get('/restaurant', [RestaurantController::class, 'index']);
+    Route::post('/restaurant', [RestaurantController::class, 'store']);
+    Route::get('/restaurant/user', [RestaurantController::class, 'getRestaurant']);
     Route::get('/user', [UserController::class, 'index']);
     Route::post('/logout', [UserController::class, 'logout']);
 });
