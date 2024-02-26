@@ -36,4 +36,9 @@ class RestaurantController extends Controller
             'user_id' => Auth::user()->id,
         ]);
     }
+
+    public function getRestaurant() {
+        // return Auth::user();
+        return Restaurant::where('user_id', Auth::user()->id)->with('user')->first();
+    }
 }
