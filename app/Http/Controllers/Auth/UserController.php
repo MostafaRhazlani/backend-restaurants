@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function index() {
-        return Auth::user();
+        return Auth::user()->load('restaurant');
     }
 
     public function login(Request $request) {
@@ -22,7 +22,7 @@ class UserController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = User::where('email', $fields['email'])->first();
+        $user = User::with('restaurant')->where('email', $fields['email'])->first();
 
         if(!$user || !Hash::check($fields['password'], $user->password)) {
             return response([
